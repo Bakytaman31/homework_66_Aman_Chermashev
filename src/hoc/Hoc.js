@@ -2,15 +2,18 @@ import React, {Component, Fragment} from "react";
 import Spinner from "../components/UI/Spinner/Spinner";
 
 const hoc = (WrappedComponent, axios) => {
-    return class WithError extends Component{
+    return class WithLoader extends Component{
         constructor(props) {
             super(props);
 
             this.state = {
-                loading: true,
+                loading: false,
             };
 
-
+            axios.interceptors.request.use(req =>{
+                this.setState({loading: true});
+                return req
+            });
             this.state.interceptorId = axios.interceptors.response.use(res =>{
                 this.setState({loading: false});
                 return res
